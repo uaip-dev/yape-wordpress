@@ -16,6 +16,7 @@ const TOOLBAR_KEYS = [
   ["showDownload", "download", () => __("Download", "yet-another-pdf-editor")],
   ["showPrint", "print", () => __("Print", "yet-another-pdf-editor")],
   ["showFullscreen", "fullscreen", () => __("Full screen", "yet-another-pdf-editor")],
+  ["showAnnotate", "annotate", () => __("Annotate and sign", "yet-another-pdf-editor")],
 ];
 
 /** Same merge as Yape_Renderer::config() in PHP. */

@@ -75,6 +75,7 @@ final class Yape_Block {
 			'showDownload'   => 'download',
 			'showPrint'      => 'print',
 			'showFullscreen' => 'fullscreen',
+			'showAnnotate'   => 'annotate',
 		);
 		foreach ( $map as $attr => $opt ) {
 			$value           = isset( $a[ $attr ] ) ? (string) $a[ $attr ] : '';

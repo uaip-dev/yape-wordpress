@@ -24,6 +24,7 @@ export interface ViewerConfig {
     download?: boolean;
     print?: boolean;
     fullscreen?: boolean;
+    annotate?: boolean;
   } | false;
 }
 
@@ -66,6 +67,36 @@ export interface Strings {
   error: string;
   openDirectly: string;
   pageThumbnail: string; // "Page %s"
+  annotate: string;
+  highlight: string;
+  draw: string;
+  text: string;
+  image: string;
+  signature: string;
+  color: string;
+  size: string;
+  small: string;
+  medium: string;
+  large: string;
+  undo: string;
+  redo: string;
+  deleteSelected: string;
+  done: string;
+  addSignature: string;
+  drawSignature: string;
+  typeSignature: string;
+  typeSignaturePlaceholder: string;
+  clear: string;
+  cancel: string;
+  add: string;
+  signatureAdded: string;
+  color_black: string;
+  color_blue: string;
+  color_red: string;
+  color_green: string;
+  color_orange: string;
+  color_yellow: string;
+  color_pink: string;
 }
 
 const fallback: Strings = {
@@ -107,6 +138,36 @@ const fallback: Strings = {
   error: "The PDF could not be displayed.",
   openDirectly: "Open the PDF",
   pageThumbnail: "Page %s",
+  annotate: "Annotate and sign",
+  highlight: "Highlight",
+  draw: "Draw",
+  text: "Add text",
+  image: "Add image",
+  signature: "Add signature",
+  color: "Colour",
+  size: "Size",
+  small: "Small",
+  medium: "Medium",
+  large: "Large",
+  undo: "Undo",
+  redo: "Redo",
+  deleteSelected: "Delete selected",
+  done: "Done",
+  addSignature: "Add your signature",
+  drawSignature: "Draw",
+  typeSignature: "Type",
+  typeSignaturePlaceholder: "Type your name",
+  clear: "Clear",
+  cancel: "Cancel",
+  add: "Add",
+  signatureAdded: "Signature added. Drag it into place.",
+  color_black: "Black",
+  color_blue: "Blue",
+  color_red: "Red",
+  color_green: "Green",
+  color_orange: "Orange",
+  color_yellow: "Yellow",
+  color_pink: "Pink",
 };
 
 let cached: Strings | null = null;

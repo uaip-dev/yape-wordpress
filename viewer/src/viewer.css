@@ -106,7 +106,91 @@
   min-width: 0;
 }
 .yape-toolbar { justify-content: space-between; }
-.yape-findbar[hidden] { display: none; }
+.yape-findbar[hidden],
+.yape-editbar[hidden] { display: none; }
+.yape-editbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 4px 6px;
+  background: var(--yape-bar);
+  border-bottom: 1px solid var(--yape-border);
+}
+.yape-editbar .yape-group[hidden] { display: none; }
+.yape-editbar .yape-group:last-child { margin-inline-start: auto; }
+.yape-btn[aria-pressed="true"] { background: var(--yape-hover); color: var(--yape-accent); box-shadow: inset 0 -2px 0 var(--yape-accent); }
+.yape-swatches { display: flex; gap: 4px; }
+.yape-swatch {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--yape-bar);
+  outline: 1px solid var(--yape-border);
+  background: var(--swatch);
+  cursor: pointer;
+}
+.yape-swatch[aria-checked="true"] { outline: 2px solid var(--yape-accent); }
+.yape-size {
+  font: inherit;
+  color: var(--yape-fg);
+  background: var(--yape-bg);
+  border: 1px solid var(--yape-border);
+  border-radius: 4px;
+  height: 30px;
+}
+
+/* ---------- signature dialog (appended to <body>) ---------- */
+.yape-dialog {
+  width: min(640px, calc(100vw - 32px));
+  box-sizing: border-box;
+  padding: 16px;
+  border: 0;
+  border-radius: 10px;
+  background: #fff;
+  color: #1d2327;
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.3);
+}
+.yape-dialog::backdrop { background: rgb(0 0 0 / 0.45); }
+.yape-dialog h2 { margin: 0 0 10px; font-size: 18px; }
+.yape-dialog .yape-tabs { display: flex; margin-bottom: 10px; border-bottom: 1px solid #dcdcde; }
+.yape-dialog .yape-tab {
+  flex: 0 0 auto;
+  font: inherit;
+  padding: 6px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #646970;
+  cursor: pointer;
+}
+.yape-dialog .yape-tab[aria-selected="true"] { color: #1d2327; border-bottom-color: #2271b1; }
+.yape-sigpad {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  border: 1px dashed #8c8f94;
+  border-radius: 6px;
+  background: #fff;
+  touch-action: none;
+  cursor: crosshair;
+}
+.yape-sigpad[hidden], .yape-sigtype[hidden] { display: none; }
+.yape-sigtype {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 18px 12px;
+  border: 1px solid #8c8f94;
+  border-radius: 6px;
+  font: italic 32px "Segoe Script", "Brush Script MT", "Snell Roundhand", cursive;
+}
+.yape-dialog__actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.yape-dialog .yape-btn { color: #1d2327; border: 1px solid #dcdcde; padding: 0 14px; }
+.yape-dialog .yape-btn--text { background: #2271b1; color: #fff; border-color: #2271b1; }
+.yape-dialog .yape-btn:disabled { opacity: 0.5; }
 .yape-group { display: flex; align-items: center; gap: 2px; min-width: 0; }
 .yape-btn {
   display: inline-flex;
@@ -257,6 +341,9 @@
 @container (max-width: 400px) {
   .yape-group--zoom { display: none; }
   .yape-page-count { display: none; }
+  .yape-toolbar { flex-wrap: wrap; row-gap: 2px; }
+  .yape-toolbar .yape-btn { min-width: 30px; padding: 0 3px; }
+  .yape-group { gap: 0; }
 }
 
 /* ---------- print: only our rasterised pages ---------- */
@@ -267,3 +354,7 @@
   .yape-print img { display: block; width: 100%; height: auto; break-after: page; }
   .yape-print img:last-child { break-after: auto; }
 }
+
+/* pdf.js alt-text and comment buttons need managers we don't load; hide them. */
+.yape-viewer .annotationEditorLayer .altText,
+.yape-viewer .annotationEditorLayer .comment { display: none !important; }

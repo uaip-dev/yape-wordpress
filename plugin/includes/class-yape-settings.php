@@ -16,7 +16,7 @@ final class Yape_Settings {
 
 	const OPTION = 'yape_settings';
 
-	const TOOLBAR_KEYS = array( 'sidebar', 'search', 'zoom', 'download', 'print', 'fullscreen' );
+	const TOOLBAR_KEYS = array( 'sidebar', 'search', 'zoom', 'download', 'print', 'fullscreen', 'annotate' );
 
 	const ZOOMS = array( 'auto', 'page-width', 'page-fit', 'page-actual', '0.5', '0.75', '1', '1.25', '1.5', '2' );
 
@@ -46,6 +46,7 @@ final class Yape_Settings {
 			'toolbar_download'   => true,
 			'toolbar_print'      => true,
 			'toolbar_fullscreen' => true,
+			'toolbar_annotate'   => true,
 			'delete_data'        => false,
 		);
 	}

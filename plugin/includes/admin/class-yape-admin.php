@@ -115,6 +115,13 @@ final class Yape_Admin {
 		$this->field( 'toolbar_download', __( 'Download', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
 		$this->field( 'toolbar_print', __( 'Print', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
 		$this->field( 'toolbar_fullscreen', __( 'Full screen', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field(
+			'toolbar_annotate',
+			__( 'Annotate and sign', 'yet-another-pdf-editor' ),
+			'yape_toolbar',
+			'checkbox',
+			__( 'Visitors can highlight, draw, add text, images and signatures, then download their copy. Nothing is uploaded to your site.', 'yet-another-pdf-editor' )
+		);
 
 		$this->field(
 			'delete_data',

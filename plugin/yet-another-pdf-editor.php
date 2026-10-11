@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Yet Another PDF Editor
  * Plugin URI:        https://github.com/uaip-dev/yape-wordpress
- * Description:       Embed PDFs with a fast, accessible viewer: search, thumbnails, outline, clickable links, download, print and full screen. Visitors can fill in PDF forms and download them. Free, no premium version.
+ * Description:       PDF viewer and editor for WordPress. Visitors can read, search, highlight, draw, add text, sign and fill in PDFs in the browser, then download their copy. Free, no premium version.
  * Version:           0.1.0
  * Requires at least: 6.5
  * Requires PHP:      7.4

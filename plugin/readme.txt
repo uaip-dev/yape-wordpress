@@ -1,6 +1,6 @@
 === Yet Another PDF Editor ===
 Contributors: uaip
-Tags: pdf, pdf viewer, pdf embed, pdf form, document
+Tags: pdf, pdf viewer, pdf annotation, sign pdf, pdf form
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -8,11 +8,21 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Embed PDFs with a fast, accessible viewer: search, thumbnails, links, download, print, full screen and form filling. Free, no premium version.
+PDF viewer and editor: visitors can read, search, annotate, sign and fill in PDFs right in the browser. Free, no premium version.
 
 == Description ==
 
-Yet Another PDF Editor puts a complete PDF viewer on your pages. Every feature is free: there is no premium version, no locked settings and no upgrade notices.
+Yet Another PDF Editor puts a PDF viewer and editor on your pages. Visitors can read a PDF, mark it up, sign it or fill it in, and download their own copy, all in the browser. Every feature is free: there is no premium version, no locked settings and no upgrade notices.
+
+= Annotate and sign =
+
+* Highlight text in five colours.
+* Draw freehand, in five colours and three sizes.
+* Add text boxes and images.
+* Sign: draw a signature with mouse, finger or pen, or type your name. Place, move and resize it anywhere on the page.
+* Undo, redo and delete.
+* Download saves everything into the visitor's copy of the PDF. Nothing is uploaded to your site, so there is no personal data to store.
+* Turn it off site-wide or per block if you only want a viewer.
 
 = Viewer =
 
@@ -43,7 +53,7 @@ Yet Another PDF Editor puts a complete PDF viewer on your pages. Every feature i
 
 = Coming next =
 
-Annotate, highlight and sign PDFs in the browser, page tools (rotate, reorder, delete, merge) in the Media Library, and sending completed forms to the site. All free.
+Page tools (rotate, reorder, delete, merge, redact) in the Media Library, and sending completed forms and signed PDFs to the site. All free.
 
 == Installation ==
 
@@ -60,7 +70,7 @@ No. Everything is free.
 
 = Which shortcode options are there? =
 
-`[yape_pdf id="123" height="80vh" page="2" zoom="page-width" download="no" print="no" search="yes" sidebar="yes" fullscreen="yes" thumbnails="open" load="click" toolbar="none" title="Annual report"]`
+`[yape_pdf id="123" height="80vh" page="2" zoom="page-width" download="no" print="no" search="yes" sidebar="yes" fullscreen="yes" annotate="no" thumbnails="open" load="click" toolbar="none" title="Annual report"]`
 
 Use `id` for a PDF from the Media Library, or `url` for a PDF at another address. `width` limits the viewer's maximum width.
 
@@ -71,6 +81,14 @@ Yes, with `url`, as long as that website allows cross-origin requests (CORS). Ot
 = Does it stop people from downloading my PDF? =
 
 You can hide the download and print buttons. A PDF shown in a browser can still be saved by a determined visitor, so do not rely on this to protect confidential files.
+
+= Are signatures legally binding? =
+
+The signature is a picture of a handwritten or typed signature placed on the PDF, like signing a printed page. It is not a cryptographic digital signature (certificate). Whether that is enough depends on your use and your local laws.
+
+= Where are annotations and signatures stored? =
+
+Only in the visitor's browser until they download the PDF. Nothing is sent to your site or anywhere else.
 
 = Does the plugin contact external services? =
 
@@ -83,14 +101,16 @@ Yes. The viewer loads PDFs and its own files directly from your site and does no
 == Screenshots ==
 
 1. A PDF with the thumbnails sidebar open.
-2. Searching inside a document.
-3. Block settings in the editor.
-4. Settings > PDF Viewer.
+2. Annotating: highlight, drawing, text and a signature.
+3. Adding a signature.
+4. Searching inside a document.
+5. Block settings in the editor.
+6. Settings > PDF Viewer.
 
 == Changelog ==
 
 = 0.1.0 =
-* First release: PDF Viewer block, [yape_pdf] shortcode, search, thumbnails, outline, links, zoom, download, print, full screen, form filling, password-protected PDFs, lazy loading.
+* First release: PDF Viewer block, [yape_pdf] shortcode, search, thumbnails, outline, links, zoom, download, print, full screen, form filling, annotate (highlight, draw, text, images) and sign, password-protected PDFs, lazy loading.
 
 == Upgrade Notice ==
 

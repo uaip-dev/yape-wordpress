@@ -13,6 +13,7 @@ import {
 import { format, strings, type ViewerConfig } from "./config";
 import { icons } from "./icons";
 import { printDocument } from "./print";
+import { createAnnotator, HIGHLIGHT_COLORS, type Annotator } from "./annotate";
 
 const assetBase = new URL("../pdfjs/", import.meta.url);
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("pdf.worker.min.js", assetBase).href;
@@ -55,7 +56,7 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
   const tb: Toolbar | null =
     config.toolbar === false
       ? null
-      : { sidebar: true, search: true, zoom: true, download: true, print: true, fullscreen: true, ...config.toolbar };
+      : { sidebar: true, search: true, zoom: true, download: true, print: true, fullscreen: true, annotate: true, ...config.toolbar };
   const figure = (frame.closest(".yape-pdf") as HTMLElement | null) ?? frame;
   const cleanups: (() => void)[] = [];
   const on = <T extends EventTarget>(target: T, type: string, fn: (e: any) => void, opts?: AddEventListenerOptions) => {
@@ -93,6 +94,7 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
     customZoom,
   );
   const searchBtn = btn(t.search, icons.search, { "aria-expanded": "false" });
+  const annotateBtn = btn(t.annotate, icons.annotate, { "aria-expanded": "false" });
   const downloadBtn = btn(t.download, icons.download);
   const printBtn = btn(t.print, icons.print);
   const fsBtn = btn(t.fullscreen, icons.fullscreen);
@@ -105,6 +107,7 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
       h(doc, "span", { class: "yape-page" }, pageInput, pageCount), nextBtn),
     h(doc, "div", { class: "yape-group yape-group--zoom" }, ...(tb?.zoom ? [zoomOutBtn, zoomSelect, zoomInBtn] : [])),
     h(doc, "div", { class: "yape-group yape-group--end" },
+      ...(tb?.annotate ? [annotateBtn] : []),
       ...(tb?.search ? [searchBtn] : []),
       ...(tb?.download ? [downloadBtn] : []),
       ...(tb?.print ? [printBtn] : []),
@@ -124,6 +127,8 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
   const findbar = h(doc, "div", { class: "yape-findbar", hidden: true, role: "search" },
     findInput, findPrev, findNext, findStatus, findClose);
 
+  const editbar = h(doc, "div", { class: "yape-editbar", hidden: true });
+
   const thumbsTab = h(doc, "button", { type: "button", role: "tab", class: "yape-tab", "aria-selected": "true" }, t.thumbnails);
   const outlineTab = h(doc, "button", { type: "button", role: "tab", class: "yape-tab", "aria-selected": "false", hidden: true }, t.outline);
   const thumbsPanel = h(doc, "div", { class: "yape-thumbs", role: "tabpanel", "aria-label": t.thumbnails });
@@ -136,7 +141,7 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
   const message = h(doc, "div", { class: "yape-message", role: "status" }, t.loading);
   const main = h(doc, "div", { class: "yape-main" }, container, message);
   const live = h(doc, "div", { class: "yape-sr", "aria-live": "polite" });
-  const root = h(doc, "div", { class: "yape-viewer" }, ...(tb ? [toolbar, findbar] : []),
+  const root = h(doc, "div", { class: "yape-viewer" }, ...(tb ? [toolbar, findbar, editbar] : []),
     h(doc, "div", { class: "yape-body" }, sidebar, main), live);
 
   frame.replaceChildren(root);
@@ -158,7 +163,8 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
     findController,
     textLayerMode: 1,
     annotationMode: pdfjsLib.AnnotationMode.ENABLE_FORMS,
-    annotationEditorMode: pdfjsLib.AnnotationEditorType.DISABLE,
+    annotationEditorMode: tb?.annotate ? pdfjsLib.AnnotationEditorType.NONE : pdfjsLib.AnnotationEditorType.DISABLE,
+    annotationEditorHighlightColors: Object.entries(HIGHLIGHT_COLORS).map(([k, v]) => `${k}=${v}`).join(","),
     removePageBorders: false,
   });
   linkService.setViewer(viewer);
@@ -337,6 +343,20 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
     },
   );
 
+  // ---------- annotate and sign ----------
+  let annotator: Annotator | null = null;
+  if (tb?.annotate) {
+    annotator = createAnnotator({ doc, win, t, pdf, viewer, eventBus, bar: editbar, announce });
+    const syncAnnotate = () => annotateBtn.setAttribute("aria-expanded", String(annotator!.isOpen));
+    on(annotateBtn, "click", () => {
+      if (annotator!.isOpen) annotator!.close();
+      else annotator!.open();
+      syncAnnotate();
+    });
+    on(editbar, "click", () => win.setTimeout(syncAnnotate, 0));
+    cleanups.push(() => annotator?.destroy());
+  }
+
   // ---------- keyboard ----------
   on(root, "keydown", (e: KeyboardEvent) => {
     const mod = e.ctrlKey || e.metaKey;
@@ -444,6 +464,7 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
     const name = fileName(config);
     let href = config.url;
     let revoke = false;
+    await annotator?.commit();
     // Form fields the visitor filled in are saved into the downloaded copy.
     if (pdf.annotationStorage.size > 0) {
       const bytes = await pdf.saveDocument();
@@ -454,12 +475,14 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
     doc.body.append(a);
     a.click();
     a.remove();
+    annotator?.markSaved();
     if (revoke) win.setTimeout(() => URL.revokeObjectURL(href), 30_000);
   });
 
   on(printBtn, "click", async () => {
     printBtn.disabled = true;
     announce(t.preparingPrint);
+    await annotator?.commit();
     try {
       await printDocument(pdf, win);
     } finally {

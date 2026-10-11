@@ -5,8 +5,8 @@
   "title": "PDF Viewer",
   "category": "embed",
   "icon": "pdf",
-  "description": "Embed a PDF with search, thumbnails, download, print and full screen.",
-  "keywords": ["pdf", "document", "viewer", "embed", "flipbook"],
+  "description": "Embed a PDF that visitors can read, search, annotate, fill in and sign.",
+  "keywords": ["pdf", "document", "viewer", "annotate", "sign", "form"],
   "textdomain": "yet-another-pdf-editor",
   "attributes": {
     "id": { "type": "number", "default": 0 },
@@ -23,7 +23,8 @@
     "showZoom": { "type": "string", "default": "" },
     "showDownload": { "type": "string", "default": "" },
     "showPrint": { "type": "string", "default": "" },
-    "showFullscreen": { "type": "string", "default": "" }
+    "showFullscreen": { "type": "string", "default": "" },
+    "showAnnotate": { "type": "string", "default": "" }
   },
   "supports": {
     "align": ["wide", "full"],

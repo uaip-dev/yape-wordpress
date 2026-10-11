@@ -37,6 +37,7 @@ final class Yape_Renderer {
 			'download'    => '',
 			'print'       => '',
 			'fullscreen'  => '',
+			'annotate'    => '',
 			'maxWidth'    => '',
 		);
 	}
@@ -102,6 +103,7 @@ final class Yape_Renderer {
 				'download'   => 'download',
 				'print'      => 'print',
 				'fullscreen' => 'fullscreen',
+				'annotate'   => 'annotate',
 			);
 			foreach ( $map as $key => $opt ) {
 				$value           = (string) $o[ $opt ];

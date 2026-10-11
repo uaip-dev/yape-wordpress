@@ -70,6 +70,7 @@ final class Yape_Shortcode {
 				'download'   => '',
 				'print'      => '',
 				'fullscreen' => '',
+				'annotate'   => '',
 				'toolbar'    => '',
 				'thumbnails' => '',
 			),
@@ -97,6 +98,7 @@ final class Yape_Shortcode {
 				'download'    => self::toggle( $atts['download'] ),
 				'print'       => self::toggle( $atts['print'] ),
 				'fullscreen'  => self::toggle( $atts['fullscreen'] ),
+				'annotate'    => self::toggle( $atts['annotate'] ),
 			)
 		);
 	}
