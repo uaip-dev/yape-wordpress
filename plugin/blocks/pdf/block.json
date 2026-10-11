@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "yape/pdf",
+  "title": "PDF Viewer",
+  "category": "embed",
+  "icon": "pdf",
+  "description": "Embed a PDF with search, thumbnails, download, print and full screen.",
+  "keywords": ["pdf", "document", "viewer", "embed", "flipbook"],
+  "textdomain": "yet-another-pdf-editor",
+  "attributes": {
+    "id": { "type": "number", "default": 0 },
+    "url": { "type": "string", "default": "" },
+    "title": { "type": "string", "default": "" },
+    "height": { "type": "string", "default": "" },
+    "page": { "type": "number", "default": 1 },
+    "zoom": { "type": "string", "default": "" },
+    "load": { "type": "string", "default": "" },
+    "sidebarOpen": { "type": "string", "default": "" },
+    "toolbar": { "type": "string", "default": "" },
+    "showSidebar": { "type": "string", "default": "" },
+    "showSearch": { "type": "string", "default": "" },
+    "showZoom": { "type": "string", "default": "" },
+    "showDownload": { "type": "string", "default": "" },
+    "showPrint": { "type": "string", "default": "" },
+    "showFullscreen": { "type": "string", "default": "" }
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true,
+    "html": false,
+    "spacing": { "margin": true }
+  },
+  "editorScript": "yape-block-editor",
+  "style": "yape-viewer",
+  "viewScriptModule": "yape-viewer"
+}

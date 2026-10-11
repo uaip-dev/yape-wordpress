@@ -1,0 +1,25 @@
+[workspace]
+resolver = "2"
+members = ["yape-engine", "yape-wasm"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["Yet Another PDF Editor contributors"]
+
+[workspace.dependencies]
+# pdfium_7350 matches the API level the engine is written against; the
+# bundled PDFium (chromium/8086) is newer and supports it.
+pdfium-render = { version = "0.8", default-features = false, features = ["pdfium_7350"] }
+lopdf = { version = "0.45", default-features = false }
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+serde = { version = "1", features = ["derive"] }
+getrandom = "0.4"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "z"
+panic = "abort"
+strip = true

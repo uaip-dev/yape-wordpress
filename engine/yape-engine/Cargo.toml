@@ -1,0 +1,23 @@
+[package]
+name = "yape-engine"
+description = "In-memory PDF engine (PDFium + lopdf) for Yet Another PDF Editor on the web"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+pdfium-render.workspace = true
+lopdf.workspace = true
+chrono.workspace = true
+serde.workspace = true
+getrandom.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# Browser clock and crypto.getRandomValues on wasm32-unknown-unknown.
+chrono = { workspace = true, features = ["wasmbind"] }
+getrandom = { workspace = true, features = ["wasm_js"] }
+lopdf = { workspace = true, features = ["wasm_js"] }
+
+[dev-dependencies]
+serde_json = "1"

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YAPE engine spike</title>
+<style>
+  body { font: 14px/1.4 system-ui, sans-serif; margin: 16px; background: #f4f4f5; color: #18181b; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  canvas { background: #fff; box-shadow: 0 1px 4px #0003; max-width: 100%; }
+  pre { background: #fff; padding: 8px; max-height: 40vh; overflow: auto; }
+  #status { font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>YAPE engine spike</h1>
+<p>PDFium (WASM) + yape-engine (Rust → WASM) running in a Web Worker. Serve <code>engine/</code> and open
+  <code>/spike/</code>. Add <code>?auto</code> to run the whole flow on the test fixture.</p>
+<div class="bar">
+  <input type="file" id="file" accept="application/pdf,.pdf">
+  <input type="password" id="password" placeholder="password (optional)">
+  <button id="annot" disabled>Add rectangle</button>
+  <button id="save" disabled>Save + reopen</button>
+  <a id="download" hidden>Download saved PDF</a>
+  <span id="status"></span>
+</div>
+<canvas id="canvas"></canvas>
+<pre id="log"></pre>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const log = (...a) => { $("log").textContent += a.map((x) => typeof x === "string" ? x : JSON.stringify(x)).join(" ") + "\n"; };
+
+const worker = new Worker("worker.js");
+let seq = 0;
+const pending = new Map();
+worker.onmessage = ({ data }) => {
+  const p = pending.get(data.id);
+  pending.delete(data.id);
+  data.ok ? p.resolve(data.result) : p.reject(new Error(data.error));
+};
+const call = (cmd, ...args) => new Promise((resolve, reject) => {
+  const id = ++seq;
+  pending.set(id, { resolve, reject });
+  const transfer = args.filter((a) => a instanceof ArrayBuffer);
+  worker.postMessage({ id, cmd, args }, transfer);
+});
+
+let doc = null;
+
+async function show(page = 0) {
+  const t = performance.now();
+  const { width, height, pixels } = await call("render", doc.id, page, devicePixelRatio || 1);
+  const c = $("canvas");
+  c.width = width; c.height = height;
+  c.style.width = width / (devicePixelRatio || 1) + "px";
+  c.getContext("2d").putImageData(new ImageData(pixels, width, height), 0, 0);
+  log(`rendered page ${page + 1}: ${width}x${height} in ${Math.round(performance.now() - t)} ms`);
+  return { width, height, pixels };
+}
+
+async function openBytes(buf, password) {
+  if (doc) await call("close", doc.id);
+  doc = await call("open", buf, password || null);
+  log("opened:", doc);
+  log("page 1 text:", await call("pageText", doc.id, 0));
+  log("page 1 annotations:", (await call("annotations", doc.id, 0)).length);
+  await show(0);
+  $("annot").disabled = $("save").disabled = false;
+}
+
+async function addRect() {
+  const state = await call("addAnnotation", doc.id, 0,
+    { type: "shape", kind: "rectangle", rect: [300, 72, 500, 172], color: [255, 0, 0], width: 4 }, "Spike");
+  log("added rectangle:", state, "annotations now:", (await call("annotations", doc.id, 0)).length);
+  return show(0);
+}
+
+async function saveAndReopen() {
+  const before = (await call("annotations", doc.id, 0)).length;
+  const bytes = await call("save", doc.id);
+  log(`saved ${bytes.length} bytes`);
+  const a = $("download");
+  if (a.href) URL.revokeObjectURL(a.href);
+  a.href = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+  a.download = "annotated.pdf";
+  a.hidden = false;
+  await openBytes(bytes.slice().buffer, $("password").value);
+  const after = (await call("annotations", doc.id, 0)).length;
+  log(`reopened saved bytes: ${after} annotation(s) (before save: ${before})`);
+  return { before, after };
+}
+
+const run = (fn) => async (...a) => {
+  $("status").textContent = "working…";
+  try { await fn(...a); $("status").textContent = ""; }
+  catch (e) { $("status").textContent = "Error: " + e.message; log("ERROR", e.message); }
+};
+
+$("file").onchange = run(async () => {
+  const f = $("file").files[0];
+  if (f) await openBytes(await f.arrayBuffer(), $("password").value);
+});
+$("annot").onclick = run(addRect);
+$("save").onclick = run(saveAndReopen);
+
+(async () => {
+  const t = await call("ready");
+  log(`engine ready: PDFium ${t.pdfiumMs} ms, yape-wasm ${t.yapeMs} ms`);
+  if (!new URLSearchParams(location.search).has("auto")) return;
+  try {
+    const buf = await (await fetch("../tests/fixtures/hello.pdf")).arrayBuffer();
+    await openBytes(buf);
+    const { width, pixels } = await addRect();
+    const dpr = devicePixelRatio || 1;
+    const i = (Math.round(120 * dpr) * width + Math.round(300 * dpr)) * 4;
+    const red = pixels[i] > 200 && pixels[i + 1] < 60 && pixels[i + 2] < 60;
+    const { before, after } = await saveAndReopen();
+    const pass = red && before === 1 && after === 1;
+    document.title = pass ? "PASS" : "FAIL";
+    $("status").textContent = pass ? "PASS" : "FAIL";
+    log(pass ? "AUTO TEST PASS" : `AUTO TEST FAIL (red=${red}, before=${before}, after=${after})`);
+  } catch (e) {
+    document.title = "FAIL";
+    log("AUTO TEST FAIL", e.message);
+  }
+})().catch((e) => log("engine failed to start:", e.message));
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "yape-wordpress",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Yet Another PDF Editor for WordPress: PDF viewer, annotate, fill and sign.",
+  "license": "GPL-2.0-or-later",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "check": "tsc --noEmit -p viewer",
+    "zip": "node scripts/build.mjs && node scripts/make-zip.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "pdfjs-dist": "6.3.289",
+    "typescript": "6.0.3"
+  }
+}

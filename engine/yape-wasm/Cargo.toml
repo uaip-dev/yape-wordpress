@@ -1,0 +1,20 @@
+[package]
+name = "yape-wasm"
+description = "WebAssembly bindings for yape-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+yape-engine = { path = "../yape-engine" }
+pdfium-render.workspace = true
+serde.workspace = true
+wasm-bindgen = "=0.2.129"
+serde-wasm-bindgen = "0.6"
+js-sys = "0.3"
+# Compiles out pdfium-render's per-call debug!/trace! logging (and its strings).
+log = { version = "0.4", features = ["release_max_level_warn"] }

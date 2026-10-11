@@ -1,0 +1,8 @@
+/vendor/
+/target/
+/pkg/
+/dist/
+/spike/pkg/
+/spike/pdfium/
+/tests/out/
+node_modules/
