@@ -1,4 +1,4 @@
-=== Yet Another PDF Editor ===
+=== UAIP Yet Another PDF Editor ===
 Contributors: uaip
 Tags: pdf, pdf viewer, pdf annotation, sign pdf, pdf form
 Requires at least: 6.5
@@ -12,7 +12,7 @@ PDF viewer and editor: visitors can read, search, annotate, sign and fill in PDF
 
 == Description ==
 
-Yet Another PDF Editor puts a PDF viewer and editor on your pages. Visitors can read a PDF, mark it up, sign it or fill it in, and download their own copy, all in the browser. Every feature is free: there is no premium version, no locked settings and no upgrade notices.
+UAIP Yet Another PDF Editor puts a PDF viewer and editor on your pages. Visitors can read a PDF, mark it up, sign it or fill it in, and download their own copy, all in the browser. Every feature is free: there is no premium version, no locked settings and no upgrade notices.
 
 = Annotate and sign =
 

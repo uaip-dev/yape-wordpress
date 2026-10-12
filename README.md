@@ -1,4 +1,4 @@
-# Yet Another PDF Editor for WordPress
+# UAIP Yet Another PDF Editor for WordPress
 
 A free WordPress plugin that embeds PDFs with a modern, accessible viewer and lets you and
 your visitors annotate, fill in and sign PDFs right in the browser.
@@ -28,7 +28,7 @@ Requirements: Node 22.13+ (or 24) and pnpm. The engine also needs Rust with the
 ```sh
 pnpm install
 pnpm build        # viewer + block + pdf.js assets into plugin/build/
-pnpm zip          # dist/yet-another-pdf-editor.zip, ready for WordPress
+pnpm zip          # dist/uaip-yet-another-pdf-editor.zip, ready for WordPress
 ```
 
 ## Local WordPress
@@ -44,7 +44,7 @@ the git-ignored `dev/.data/admin-password.txt`) and mounts
 To test other plugins alongside, mount them in a git-ignored `dev/docker-compose.override.yml`.
 
 Checks before a release: `pnpm check` (TypeScript), `php -l` on PHP 7.4, and Plugin Check
-(`docker compose run --rm cli wp plugin check yet-another-pdf-editor`).
+(`docker compose run --rm cli wp plugin check uaip-yet-another-pdf-editor`).
 
 ## Maintainers
 

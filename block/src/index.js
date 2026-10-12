@@ -10,13 +10,13 @@ const { PanelBody, TextControl, SelectControl, ToggleControl, Notice } = wp.comp
 
 const data = window.yapeBlock || { viewerUrl: "", defaults: {} };
 const TOOLBAR_KEYS = [
-  ["showSidebar", "sidebar", () => __("Sidebar (thumbnails, outline)", "yet-another-pdf-editor")],
-  ["showSearch", "search", () => __("Search", "yet-another-pdf-editor")],
-  ["showZoom", "zoom", () => __("Zoom", "yet-another-pdf-editor")],
-  ["showDownload", "download", () => __("Download", "yet-another-pdf-editor")],
-  ["showPrint", "print", () => __("Print", "yet-another-pdf-editor")],
-  ["showFullscreen", "fullscreen", () => __("Full screen", "yet-another-pdf-editor")],
-  ["showAnnotate", "annotate", () => __("Annotate and sign", "yet-another-pdf-editor")],
+  ["showSidebar", "sidebar", () => __("Sidebar (thumbnails, outline)", "uaip-yet-another-pdf-editor")],
+  ["showSearch", "search", () => __("Search", "uaip-yet-another-pdf-editor")],
+  ["showZoom", "zoom", () => __("Zoom", "uaip-yet-another-pdf-editor")],
+  ["showDownload", "download", () => __("Download", "uaip-yet-another-pdf-editor")],
+  ["showPrint", "print", () => __("Print", "uaip-yet-another-pdf-editor")],
+  ["showFullscreen", "fullscreen", () => __("Full screen", "uaip-yet-another-pdf-editor")],
+  ["showAnnotate", "annotate", () => __("Annotate and sign", "uaip-yet-another-pdf-editor")],
 ];
 
 /** Same merge as Yape_Renderer::config() in PHP. */
@@ -51,7 +51,7 @@ function Preview({ attributes }) {
     // attribute changes) never tears down the wrong viewer.
     const frame = slot.ownerDocument.createElement("div");
     frame.className = "yape-pdf__frame";
-    frame.textContent = __("Loading PDF…", "yet-another-pdf-editor");
+    frame.textContent = __("Loading PDF…", "uaip-yet-another-pdf-editor");
     slot.replaceChildren(frame);
     let unmount = null;
     let cancelled = false;
@@ -81,7 +81,7 @@ function choice(label, value, onChange, options) {
   return el(SelectControl, { __nextHasNoMarginBottom: true, __next40pxDefaultSize: true, label, value, onChange, options });
 }
 
-const DEFAULT = () => ({ label: __("Site default", "yet-another-pdf-editor"), value: "" });
+const DEFAULT = () => ({ label: __("Site default", "uaip-yet-another-pdf-editor"), value: "" });
 
 function Edit({ attributes, setAttributes }) {
   const blockProps = useBlockProps();
@@ -98,8 +98,8 @@ function Edit({ attributes, setAttributes }) {
       el(MediaPlaceholder, {
         icon: "pdf",
         labels: {
-          title: __("PDF Viewer", "yet-another-pdf-editor"),
-          instructions: __("Upload a PDF, pick one from the Media Library, or insert from a URL.", "yet-another-pdf-editor"),
+          title: __("PDF Viewer", "uaip-yet-another-pdf-editor"),
+          instructions: __("Upload a PDF, pick one from the Media Library, or insert from a URL.", "uaip-yet-another-pdf-editor"),
         },
         accept: "application/pdf",
         allowedTypes: ["application/pdf"],
@@ -130,27 +130,27 @@ function Edit({ attributes, setAttributes }) {
       null,
       el(
         PanelBody,
-        { title: __("Document", "yet-another-pdf-editor") },
+        { title: __("Document", "uaip-yet-another-pdf-editor") },
         el(TextControl, {
           __nextHasNoMarginBottom: true,
           __next40pxDefaultSize: true,
-          label: __("Title", "yet-another-pdf-editor"),
-          help: __("Used as the accessible name and the link text before the viewer loads.", "yet-another-pdf-editor"),
+          label: __("Title", "uaip-yet-another-pdf-editor"),
+          help: __("Used as the accessible name and the link text before the viewer loads.", "uaip-yet-another-pdf-editor"),
           value: attributes.title,
           onChange: (title) => setAttributes({ title }),
         }),
         !attributes.id &&
           el(Notice, { status: "info", isDismissible: false },
-            __("External PDFs must allow cross-origin requests (CORS) or they will not load.", "yet-another-pdf-editor")),
+            __("External PDFs must allow cross-origin requests (CORS) or they will not load.", "uaip-yet-another-pdf-editor")),
       ),
       el(
         PanelBody,
-        { title: __("Display", "yet-another-pdf-editor") },
+        { title: __("Display", "uaip-yet-another-pdf-editor") },
         el(TextControl, {
           __nextHasNoMarginBottom: true,
           __next40pxDefaultSize: true,
-          label: __("Height", "yet-another-pdf-editor"),
-          help: __("For example 800px or 80vh. Leave empty for the site default.", "yet-another-pdf-editor"),
+          label: __("Height", "uaip-yet-another-pdf-editor"),
+          help: __("For example 800px or 80vh. Leave empty for the site default.", "uaip-yet-another-pdf-editor"),
           value: attributes.height,
           onChange: (height) => setAttributes({ height }),
         }),
@@ -159,30 +159,30 @@ function Edit({ attributes, setAttributes }) {
           __next40pxDefaultSize: true,
           type: "number",
           min: 1,
-          label: __("Start at page", "yet-another-pdf-editor"),
+          label: __("Start at page", "uaip-yet-another-pdf-editor"),
           value: String(attributes.page || 1),
           onChange: (v) => setAttributes({ page: Math.max(1, parseInt(v, 10) || 1) }),
         }),
-        choice(__("Zoom", "yet-another-pdf-editor"), attributes.zoom, (zoom) => setAttributes({ zoom }), [
+        choice(__("Zoom", "uaip-yet-another-pdf-editor"), attributes.zoom, (zoom) => setAttributes({ zoom }), [
           DEFAULT(),
-          { label: __("Automatic", "yet-another-pdf-editor"), value: "auto" },
-          { label: __("Page width", "yet-another-pdf-editor"), value: "page-width" },
-          { label: __("Page fit", "yet-another-pdf-editor"), value: "page-fit" },
-          { label: __("Actual size", "yet-another-pdf-editor"), value: "page-actual" },
+          { label: __("Automatic", "uaip-yet-another-pdf-editor"), value: "auto" },
+          { label: __("Page width", "uaip-yet-another-pdf-editor"), value: "page-width" },
+          { label: __("Page fit", "uaip-yet-another-pdf-editor"), value: "page-fit" },
+          { label: __("Actual size", "uaip-yet-another-pdf-editor"), value: "page-actual" },
           ...[50, 75, 100, 125, 150, 200].map((p) => ({ label: `${p}%`, value: String(p / 100) })),
         ]),
-        choice(__("Loading", "yet-another-pdf-editor"), attributes.load, (load) => setAttributes({ load }), [
+        choice(__("Loading", "uaip-yet-another-pdf-editor"), attributes.load, (load) => setAttributes({ load }), [
           DEFAULT(),
-          { label: __("When scrolled into view", "yet-another-pdf-editor"), value: "scroll" },
-          { label: __("When the visitor clicks", "yet-another-pdf-editor"), value: "click" },
+          { label: __("When scrolled into view", "uaip-yet-another-pdf-editor"), value: "scroll" },
+          { label: __("When the visitor clicks", "uaip-yet-another-pdf-editor"), value: "click" },
         ]),
       ),
       el(
         PanelBody,
-        { title: __("Toolbar", "yet-another-pdf-editor"), initialOpen: false },
+        { title: __("Toolbar", "uaip-yet-another-pdf-editor"), initialOpen: false },
         el(ToggleControl, {
           __nextHasNoMarginBottom: true,
-          label: __("Hide the toolbar", "yet-another-pdf-editor"),
+          label: __("Hide the toolbar", "uaip-yet-another-pdf-editor"),
           checked: toolbarHidden,
           onChange: (v) => setAttributes({ toolbar: v ? "none" : "" }),
         }),
@@ -193,17 +193,17 @@ function Edit({ attributes, setAttributes }) {
               { key: attr, style: { marginTop: 12 } },
               choice(label(), attributes[attr], (v) => setAttributes({ [attr]: v }), [
                 DEFAULT(),
-                { label: __("Show", "yet-another-pdf-editor"), value: "show" },
-                { label: __("Hide", "yet-another-pdf-editor"), value: "hide" },
+                { label: __("Show", "uaip-yet-another-pdf-editor"), value: "show" },
+                { label: __("Hide", "uaip-yet-another-pdf-editor"), value: "hide" },
               ]),
             ),
           ),
         !toolbarHidden &&
           el("div", { style: { marginTop: 12 } },
-            choice(__("Sidebar on load", "yet-another-pdf-editor"), attributes.sidebarOpen, (sidebarOpen) => setAttributes({ sidebarOpen }), [
+            choice(__("Sidebar on load", "uaip-yet-another-pdf-editor"), attributes.sidebarOpen, (sidebarOpen) => setAttributes({ sidebarOpen }), [
               DEFAULT(),
-              { label: __("Open", "yet-another-pdf-editor"), value: "open" },
-              { label: __("Closed", "yet-another-pdf-editor"), value: "closed" },
+              { label: __("Open", "uaip-yet-another-pdf-editor"), value: "open" },
+              { label: __("Closed", "uaip-yet-another-pdf-editor"), value: "closed" },
             ])),
       ),
     ),

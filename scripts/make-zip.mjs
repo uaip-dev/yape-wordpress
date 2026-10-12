@@ -1,11 +1,11 @@
-// Packs plugin/ into dist/yet-another-pdf-editor.zip (folder name = plugin slug).
+// Packs plugin/ into dist/uaip-yet-another-pdf-editor.zip (folder name = plugin slug).
 // Small dependency-free ZIP writer (deflate via node:zlib).
 import { deflateRawSync, crc32 } from "node:zlib";
 import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const SLUG = "yet-another-pdf-editor";
+const SLUG = "uaip-yet-another-pdf-editor";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const src = join(root, "plugin");
 const dist = join(root, "dist");

@@ -2,7 +2,7 @@
   "name": "yape-wordpress",
   "private": true,
   "version": "0.1.0",
-  "description": "Yet Another PDF Editor for WordPress: PDF viewer, annotate, fill and sign.",
+  "description": "UAIP Yet Another PDF Editor for WordPress: PDF viewer, annotate, fill and sign.",
   "license": "GPL-2.0-or-later",
   "type": "module",
   "engines": {

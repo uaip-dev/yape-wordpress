@@ -1,6 +1,6 @@
 [package]
 name = "yape-engine"
-description = "In-memory PDF engine (PDFium + lopdf) for Yet Another PDF Editor on the web"
+description = "In-memory PDF engine (PDFium + lopdf) for UAIP Yet Another PDF Editor on the web"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

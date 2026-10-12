@@ -31,8 +31,8 @@ final class Yape_Admin {
 	 */
 	public function menu() {
 		add_options_page(
-			__( 'PDF Viewer', 'yet-another-pdf-editor' ),
-			__( 'PDF Viewer', 'yet-another-pdf-editor' ),
+			__( 'PDF Viewer', 'uaip-yet-another-pdf-editor' ),
+			__( 'PDF Viewer', 'uaip-yet-another-pdf-editor' ),
 			'manage_options',
 			self::PAGE,
 			array( $this, 'render_page' )
@@ -47,7 +47,7 @@ final class Yape_Admin {
 	 */
 	public function action_links( $links ) {
 		$url = admin_url( 'options-general.php?page=' . self::PAGE );
-		array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'yet-another-pdf-editor' ) . '</a>' );
+		array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'uaip-yet-another-pdf-editor' ) . '</a>' );
 		return $links;
 	}
 
@@ -65,20 +65,20 @@ final class Yape_Admin {
 			)
 		);
 
-		add_settings_section( 'yape_viewer', __( 'Viewer defaults', 'yet-another-pdf-editor' ), '__return_false', self::PAGE );
-		add_settings_section( 'yape_toolbar', __( 'Toolbar', 'yet-another-pdf-editor' ), array( $this, 'toolbar_intro' ), self::PAGE );
-		add_settings_section( 'yape_other', __( 'Data', 'yet-another-pdf-editor' ), '__return_false', self::PAGE );
+		add_settings_section( 'yape_viewer', __( 'Viewer defaults', 'uaip-yet-another-pdf-editor' ), '__return_false', self::PAGE );
+		add_settings_section( 'yape_toolbar', __( 'Toolbar', 'uaip-yet-another-pdf-editor' ), array( $this, 'toolbar_intro' ), self::PAGE );
+		add_settings_section( 'yape_other', __( 'Data', 'uaip-yet-another-pdf-editor' ), '__return_false', self::PAGE );
 
-		$this->field( 'height', __( 'Height', 'yet-another-pdf-editor' ), 'yape_viewer', 'text', __( 'For example 800px or 80vh.', 'yet-another-pdf-editor' ) );
+		$this->field( 'height', __( 'Height', 'uaip-yet-another-pdf-editor' ), 'yape_viewer', 'text', __( 'For example 800px or 80vh.', 'uaip-yet-another-pdf-editor' ) );
 		$this->field(
 			'zoom',
-			__( 'Zoom', 'yet-another-pdf-editor' ),
+			__( 'Zoom', 'uaip-yet-another-pdf-editor' ),
 			'yape_viewer',
 			array(
-				'auto'        => __( 'Automatic', 'yet-another-pdf-editor' ),
-				'page-width'  => __( 'Page width', 'yet-another-pdf-editor' ),
-				'page-fit'    => __( 'Page fit', 'yet-another-pdf-editor' ),
-				'page-actual' => __( 'Actual size', 'yet-another-pdf-editor' ),
+				'auto'        => __( 'Automatic', 'uaip-yet-another-pdf-editor' ),
+				'page-width'  => __( 'Page width', 'uaip-yet-another-pdf-editor' ),
+				'page-fit'    => __( 'Page fit', 'uaip-yet-another-pdf-editor' ),
+				'page-actual' => __( 'Actual size', 'uaip-yet-another-pdf-editor' ),
 				'0.5'         => '50%',
 				'0.75'        => '75%',
 				'1'           => '100%',
@@ -89,46 +89,46 @@ final class Yape_Admin {
 		);
 		$this->field(
 			'load',
-			__( 'Loading', 'yet-another-pdf-editor' ),
+			__( 'Loading', 'uaip-yet-another-pdf-editor' ),
 			'yape_viewer',
 			array(
-				'scroll' => __( 'When scrolled into view (recommended)', 'yet-another-pdf-editor' ),
-				'click'  => __( 'When the visitor clicks "Load PDF"', 'yet-another-pdf-editor' ),
+				'scroll' => __( 'When scrolled into view (recommended)', 'uaip-yet-another-pdf-editor' ),
+				'click'  => __( 'When the visitor clicks "Load PDF"', 'uaip-yet-another-pdf-editor' ),
 			)
 		);
 		$this->field(
 			'theme',
-			__( 'Colours', 'yet-another-pdf-editor' ),
+			__( 'Colours', 'uaip-yet-another-pdf-editor' ),
 			'yape_viewer',
 			array(
-				'light' => __( 'Light', 'yet-another-pdf-editor' ),
-				'dark'  => __( 'Dark', 'yet-another-pdf-editor' ),
-				'auto'  => __( 'Follow the visitor’s system setting', 'yet-another-pdf-editor' ),
+				'light' => __( 'Light', 'uaip-yet-another-pdf-editor' ),
+				'dark'  => __( 'Dark', 'uaip-yet-another-pdf-editor' ),
+				'auto'  => __( 'Follow the visitor’s system setting', 'uaip-yet-another-pdf-editor' ),
 			)
 		);
-		$this->field( 'new_tab', __( 'Open links in a new tab', 'yet-another-pdf-editor' ), 'yape_viewer', 'checkbox' );
+		$this->field( 'new_tab', __( 'Open links in a new tab', 'uaip-yet-another-pdf-editor' ), 'yape_viewer', 'checkbox' );
 
-		$this->field( 'toolbar_sidebar', __( 'Sidebar (thumbnails and outline)', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
-		$this->field( 'sidebar_open', __( 'Open the sidebar on load', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
-		$this->field( 'toolbar_search', __( 'Search', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
-		$this->field( 'toolbar_zoom', __( 'Zoom', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
-		$this->field( 'toolbar_download', __( 'Download', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
-		$this->field( 'toolbar_print', __( 'Print', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
-		$this->field( 'toolbar_fullscreen', __( 'Full screen', 'yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field( 'toolbar_sidebar', __( 'Sidebar (thumbnails and outline)', 'uaip-yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field( 'sidebar_open', __( 'Open the sidebar on load', 'uaip-yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field( 'toolbar_search', __( 'Search', 'uaip-yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field( 'toolbar_zoom', __( 'Zoom', 'uaip-yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field( 'toolbar_download', __( 'Download', 'uaip-yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field( 'toolbar_print', __( 'Print', 'uaip-yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
+		$this->field( 'toolbar_fullscreen', __( 'Full screen', 'uaip-yet-another-pdf-editor' ), 'yape_toolbar', 'checkbox' );
 		$this->field(
 			'toolbar_annotate',
-			__( 'Annotate and sign', 'yet-another-pdf-editor' ),
+			__( 'Annotate and sign', 'uaip-yet-another-pdf-editor' ),
 			'yape_toolbar',
 			'checkbox',
-			__( 'Visitors can highlight, draw, add text, images and signatures, then download their copy. Nothing is uploaded to your site.', 'yet-another-pdf-editor' )
+			__( 'Visitors can highlight, draw, add text, images and signatures, then download their copy. Nothing is uploaded to your site.', 'uaip-yet-another-pdf-editor' )
 		);
 
 		$this->field(
 			'delete_data',
-			__( 'Delete settings on uninstall', 'yet-another-pdf-editor' ),
+			__( 'Delete settings on uninstall', 'uaip-yet-another-pdf-editor' ),
 			'yape_other',
 			'checkbox',
-			__( 'Your PDFs in the Media Library are never deleted.', 'yet-another-pdf-editor' )
+			__( 'Your PDFs in the Media Library are never deleted.', 'uaip-yet-another-pdf-editor' )
 		);
 	}
 
@@ -136,7 +136,7 @@ final class Yape_Admin {
 	 * Toolbar section description.
 	 */
 	public function toolbar_intro() {
-		echo '<p>' . esc_html__( 'Buttons shown by default. Each block can override these.', 'yet-another-pdf-editor' ) . '</p>';
+		echo '<p>' . esc_html__( 'Buttons shown by default. Each block can override these.', 'uaip-yet-another-pdf-editor' ) . '</p>';
 	}
 
 	/**
@@ -192,7 +192,7 @@ final class Yape_Admin {
 				esc_attr( $id ),
 				esc_attr( $name ),
 				checked( (bool) $value, true, false ),
-				esc_html__( 'Enabled', 'yet-another-pdf-editor' )
+				esc_html__( 'Enabled', 'uaip-yet-another-pdf-editor' )
 			);
 		} else {
 			printf(
@@ -217,13 +217,13 @@ final class Yape_Admin {
 		}
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'PDF Viewer', 'yet-another-pdf-editor' ); ?></h1>
+			<h1><?php esc_html_e( 'PDF Viewer', 'uaip-yet-another-pdf-editor' ); ?></h1>
 			<p>
 				<?php
 				printf(
 					/* translators: 1: block name, 2: shortcode example. */
-					esc_html__( 'Add PDFs with the %1$s block or the %2$s shortcode.', 'yet-another-pdf-editor' ),
-					'<strong>' . esc_html__( 'PDF Viewer', 'yet-another-pdf-editor' ) . '</strong>',
+					esc_html__( 'Add PDFs with the %1$s block or the %2$s shortcode.', 'uaip-yet-another-pdf-editor' ),
+					'<strong>' . esc_html__( 'PDF Viewer', 'uaip-yet-another-pdf-editor' ) . '</strong>',
 					'<code>[yape_pdf id="123"]</code>'
 				);
 				?>

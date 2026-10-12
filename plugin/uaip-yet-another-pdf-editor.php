@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Yet Another PDF Editor
+ * Plugin Name:       UAIP Yet Another PDF Editor
  * Plugin URI:        https://github.com/uaip-dev/yape-wordpress
  * Description:       PDF viewer and editor for WordPress. Visitors can read, search, highlight, draw, add text, sign and fill in PDFs in the browser, then download their copy. Free, no premium version.
  * Version:           0.1.0
@@ -10,7 +10,7 @@
  * Author URI:        https://uaip.dev/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       yet-another-pdf-editor
+ * Text Domain:       uaip-yet-another-pdf-editor
  *
  * @package YetAnotherPdfEditor
  */

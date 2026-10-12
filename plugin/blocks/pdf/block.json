@@ -7,7 +7,7 @@
   "icon": "pdf",
   "description": "Embed a PDF that visitors can read, search, annotate, fill in and sign.",
   "keywords": ["pdf", "document", "viewer", "annotate", "sign", "form"],
-  "textdomain": "yet-another-pdf-editor",
+  "textdomain": "uaip-yet-another-pdf-editor",
   "attributes": {
     "id": { "type": "number", "default": 0 },
     "url": { "type": "string", "default": "" },

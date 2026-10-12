@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-//! In-memory PDF engine for Yet Another PDF Editor on the web.
+//! In-memory PDF engine for UAIP Yet Another PDF Editor on the web.
 //!
 //! Documents live entirely in memory (`Vec<u8>` in, `Vec<u8>` out): no file
 //! system, no threads, no async runtime. PDFium (through `pdfium-render`)

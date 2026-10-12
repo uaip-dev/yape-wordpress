@@ -28,7 +28,7 @@ else
   wp user update admin --user_pass="$ADMIN_PASS" --skip-email >/dev/null
 fi
 wp rewrite structure '/%postname%/' --hard >/dev/null
-wp plugin activate yet-another-pdf-editor
+wp plugin activate uaip-yet-another-pdf-editor
 
 if [ -z "$(wp post list --post_type=page --name=viewer-test --field=ID)" ]; then
   node make-sample-pdf.mjs .data/sample.pdf

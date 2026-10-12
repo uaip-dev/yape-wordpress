@@ -173,7 +173,7 @@ final class Yape_Renderer {
 			);
 		}
 
-		$label = '' !== $doc['title'] ? $doc['title'] : __( 'PDF document', 'yet-another-pdf-editor' );
+		$label = '' !== $doc['title'] ? $doc['title'] : __( 'PDF document', 'uaip-yet-another-pdf-editor' );
 
 		return sprintf(
 			'<figure %1$s><div class="yape-pdf__frame" data-yape="%2$s"><a class="yape-pdf__fallback" href="%3$s">%4$s</a></div></figure>',
