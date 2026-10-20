@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Shortcode for classic content, widgets and page builders.
  *
  * Example: [yape_pdf id="123" height="70vh" page="2" download="no"]
+ * Flipbook: [yape_flipbook id="123"] or [yape_pdf id="123" mode="flipbook" rtl="yes" lightbox="yes"]
  */
 final class Yape_Shortcode {
 
@@ -28,6 +29,19 @@ final class Yape_Shortcode {
 	 */
 	public function register() {
 		add_shortcode( 'yape_pdf', array( $this, 'render' ) );
+		add_shortcode( 'yape_flipbook', array( $this, 'render_flipbook' ) );
+	}
+
+	/**
+	 * [yape_flipbook]: the same as [yape_pdf mode="flipbook"].
+	 *
+	 * @param array|string $atts Attributes.
+	 * @return string
+	 */
+	public function render_flipbook( $atts ) {
+		$atts         = is_array( $atts ) ? $atts : array();
+		$atts['mode'] = 'flipbook';
+		return $this->render( $atts, '', 'yape_flipbook' );
 	}
 
 	/**
@@ -50,10 +64,12 @@ final class Yape_Shortcode {
 	/**
 	 * Renders the shortcode.
 	 *
-	 * @param array|string $atts Attributes.
+	 * @param array|string $atts    Attributes.
+	 * @param string       $content Enclosed content (unused).
+	 * @param string       $tag     Shortcode name, for the shortcode_atts filter.
 	 * @return string
 	 */
-	public function render( $atts ) {
+	public function render( $atts, $content = '', $tag = 'yape_pdf' ) {
 		$atts = shortcode_atts(
 			array(
 				'id'         => 0,
@@ -73,9 +89,13 @@ final class Yape_Shortcode {
 				'annotate'   => '',
 				'toolbar'    => '',
 				'thumbnails' => '',
+				'mode'       => '',
+				'cover'      => '',
+				'rtl'        => '',
+				'lightbox'   => '',
 			),
 			$atts,
-			'yape_pdf'
+			'yape_flipbook' === $tag ? 'yape_flipbook' : 'yape_pdf'
 		);
 
 		$sidebar_open = self::toggle( $atts['thumbnails'] );
@@ -99,6 +119,10 @@ final class Yape_Shortcode {
 				'print'       => self::toggle( $atts['print'] ),
 				'fullscreen'  => self::toggle( $atts['fullscreen'] ),
 				'annotate'    => self::toggle( $atts['annotate'] ),
+				'mode'        => 'flipbook' === strtolower( trim( (string) $atts['mode'] ) ) ? 'flipbook' : '',
+				'cover'       => self::toggle( $atts['cover'] ),
+				'rtl'         => self::toggle( $atts['rtl'] ),
+				'lightbox'    => self::toggle( $atts['lightbox'] ),
 			)
 		);
 	}

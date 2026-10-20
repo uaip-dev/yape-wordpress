@@ -6,6 +6,9 @@ your visitors annotate, fill in and sign PDFs right in the browser.
 - **Viewer:** continuous scroll, search, clickable links, text selection, thumbnails and
   bookmarks, jump to page, download, print, full screen, lazy loading, keyboard and
   screen-reader support. All free, no premium version.
+- **Flipbook:** the same PDF as a book with turning pages (StPageFlip), two-page spreads or
+  single pages on phones, cover page, right-to-left books, lightbox from a cover, thumbnail
+  strip. `[yape_flipbook id="123"]` or the PDF Flipbook block.
 - **Editor** (in progress): annotate, fill forms, sign, page tools and redaction, powered by
   PDFium compiled to WebAssembly and loaded only when someone opens it.
 
@@ -14,7 +17,7 @@ your visitors annotate, fill in and sign PDFs right in the browser.
 | Folder | What |
 |---|---|
 | `plugin/` | The WordPress plugin (PHP). `plugin/build/` is generated. |
-| `viewer/` | Front-end viewer (TypeScript on pdf.js), built into `plugin/build/viewer/`. |
+| `viewer/` | Front-end viewer and flipbook (TypeScript on pdf.js), built into `plugin/build/viewer/`. |
 | `block/` | Block editor script for the `yape/pdf` block. |
 | `engine/` | Rust PDF engine compiled to WebAssembly for the editor. |
 | `dev/` | Docker setup for a local WordPress test site. |

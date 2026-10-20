@@ -26,6 +26,9 @@ cpSync(join(pdfjsDir, "LICENSE"), join(pdfjsOut, "LICENSE"));
 for (const dir of ["cmaps", "standard_fonts", "wasm", "iccs"]) {
   cpSync(join(pdfjsDir, dir), join(pdfjsOut, dir), { recursive: true });
 }
+// StPageFlip (flipbook page turns) ships no license comment in its bundle.
+mkdirSync(join(out, "viewer"), { recursive: true });
+cpSync(join(dirname(require.resolve("page-flip/package.json")), "LICENSE"), join(out, "viewer", "page-flip-LICENSE.txt"));
 
 const common = {
   bundle: true,

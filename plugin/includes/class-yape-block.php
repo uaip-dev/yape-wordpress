@@ -67,7 +67,17 @@ final class Yape_Block {
 			'load'        => isset( $a['load'] ) ? $a['load'] : '',
 			'sidebarOpen' => isset( $a['sidebarOpen'] ) ? $a['sidebarOpen'] : '',
 			'toolbar'     => isset( $a['toolbar'] ) ? $a['toolbar'] : '',
+			'mode'        => isset( $a['mode'] ) && 'flipbook' === $a['mode'] ? 'flipbook' : '',
 		);
+		$flip = array(
+			'flipCover'    => 'cover',
+			'flipRtl'      => 'rtl',
+			'flipLightbox' => 'lightbox',
+		);
+		foreach ( $flip as $attr => $opt ) {
+			$value           = isset( $a[ $attr ] ) ? (string) $a[ $attr ] : '';
+			$options[ $opt ] = in_array( $value, array( 'show', 'hide' ), true ) ? $value : '';
+		}
 		$map = array(
 			'showSidebar'    => 'sidebar',
 			'showSearch'     => 'search',

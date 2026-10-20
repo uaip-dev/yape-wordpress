@@ -28,9 +28,13 @@ function buildConfig(a) {
       : Object.fromEntries(
           TOOLBAR_KEYS.map(([attr, key]) => [key, a[attr] ? a[attr] === "show" : d.toolbar?.[key] !== false]),
         );
+  const flipbook = a.mode === "flipbook";
   return {
     url: a.url,
     title: a.title,
+    mode: flipbook ? "flipbook" : undefined,
+    // The editor always previews the open book, also for a lightbox flipbook.
+    flipbook: flipbook ? { cover: a.flipCover !== "hide", rtl: a.flipRtl === "show", lightbox: false } : undefined,
     page: a.page > 1 ? a.page : undefined,
     zoom: a.zoom || d.zoom || "auto",
     load: "scroll",
@@ -91,14 +95,15 @@ function Edit({ attributes, setAttributes }) {
   };
   const onSelectURL = (url) => setAttributes({ id: 0, url, title: attributes.title });
 
+  const flipbook = attributes.mode === "flipbook";
   if (!attributes.url) {
     return el(
       "div",
       blockProps,
       el(MediaPlaceholder, {
-        icon: "pdf",
+        icon: flipbook ? "book" : "pdf",
         labels: {
-          title: __("PDF Viewer", "uaip-yet-another-pdf-editor"),
+          title: flipbook ? __("PDF Flipbook", "uaip-yet-another-pdf-editor") : __("PDF Viewer", "uaip-yet-another-pdf-editor"),
           instructions: __("Upload a PDF, pick one from the Media Library, or insert from a URL.", "uaip-yet-another-pdf-editor"),
         },
         accept: "application/pdf",
@@ -146,6 +151,36 @@ function Edit({ attributes, setAttributes }) {
       el(
         PanelBody,
         { title: __("Display", "uaip-yet-another-pdf-editor") },
+        choice(__("Show as", "uaip-yet-another-pdf-editor"), attributes.mode, (mode) => setAttributes({ mode }), [
+          { label: __("Document viewer", "uaip-yet-another-pdf-editor"), value: "" },
+          { label: __("Flipbook", "uaip-yet-another-pdf-editor"), value: "flipbook" },
+        ]),
+        flipbook &&
+          el("div", { style: { marginTop: 16 } },
+            el(ToggleControl, {
+              __nextHasNoMarginBottom: true,
+              label: __("Show the first page as a cover", "uaip-yet-another-pdf-editor"),
+              help: __("Off: pages are paired from the first page.", "uaip-yet-another-pdf-editor"),
+              checked: attributes.flipCover !== "hide",
+              onChange: (v) => setAttributes({ flipCover: v ? "" : "hide" }),
+            }),
+            el("div", { style: { marginTop: 12 } }),
+            el(ToggleControl, {
+              __nextHasNoMarginBottom: true,
+              label: __("Right-to-left pages", "uaip-yet-another-pdf-editor"),
+              help: __("For Arabic, Hebrew, Jawi or manga: the book opens from the right.", "uaip-yet-another-pdf-editor"),
+              checked: attributes.flipRtl === "show",
+              onChange: (v) => setAttributes({ flipRtl: v ? "show" : "" }),
+            }),
+            el("div", { style: { marginTop: 12 } }),
+            el(ToggleControl, {
+              __nextHasNoMarginBottom: true,
+              label: __("Show only the cover", "uaip-yet-another-pdf-editor"),
+              help: __("The flipbook opens in a lightbox when the cover is clicked.", "uaip-yet-another-pdf-editor"),
+              checked: attributes.flipLightbox === "show",
+              onChange: (v) => setAttributes({ flipLightbox: v ? "show" : "" }),
+            })),
+        el("div", { style: { marginTop: 16 } }),
         el(TextControl, {
           __nextHasNoMarginBottom: true,
           __next40pxDefaultSize: true,
@@ -163,7 +198,7 @@ function Edit({ attributes, setAttributes }) {
           value: String(attributes.page || 1),
           onChange: (v) => setAttributes({ page: Math.max(1, parseInt(v, 10) || 1) }),
         }),
-        choice(__("Zoom", "uaip-yet-another-pdf-editor"), attributes.zoom, (zoom) => setAttributes({ zoom }), [
+        !flipbook && choice(__("Zoom", "uaip-yet-another-pdf-editor"), attributes.zoom, (zoom) => setAttributes({ zoom }), [
           DEFAULT(),
           { label: __("Automatic", "uaip-yet-another-pdf-editor"), value: "auto" },
           { label: __("Page width", "uaip-yet-another-pdf-editor"), value: "page-width" },
@@ -186,6 +221,9 @@ function Edit({ attributes, setAttributes }) {
           checked: toolbarHidden,
           onChange: (v) => setAttributes({ toolbar: v ? "none" : "" }),
         }),
+        flipbook &&
+          el("p", { className: "components-base-control__help", style: { marginTop: 12 } },
+            __("In a flipbook, the sidebar shows a thumbnail strip, and search, zoom or annotate add a button that opens the document viewer.", "uaip-yet-another-pdf-editor")),
         !toolbarHidden &&
           TOOLBAR_KEYS.map(([attr, , label]) =>
             el(
@@ -214,6 +252,18 @@ function Edit({ attributes, setAttributes }) {
 registerBlockType("yape/pdf", {
   edit: Edit,
   save: () => null,
+  variations: [
+    {
+      name: "flipbook",
+      title: __("PDF Flipbook", "uaip-yet-another-pdf-editor"),
+      description: __("Show a PDF as a book with turning pages: magazines, brochures, catalogues.", "uaip-yet-another-pdf-editor"),
+      icon: "book",
+      keywords: ["flipbook", "flip book", "magazine", "brochure", "catalogue", "catalog", "page flip"],
+      attributes: { mode: "flipbook" },
+      scope: ["inserter", "transform"],
+      isActive: (a) => a.mode === "flipbook",
+    },
+  ],
   transforms: {
     from: [
       {

@@ -17,6 +17,8 @@ final class Yape_Renderer {
 
 	/**
 	 * Normalised options accepted by render(). Each toolbar entry is '', 'show' or 'hide'.
+	 * `mode` is '' (document viewer) or 'flipbook'; `cover`, `rtl` and `lightbox` are
+	 * flipbook options ('', 'show' or 'hide').
 	 *
 	 * @return array
 	 */
@@ -39,6 +41,10 @@ final class Yape_Renderer {
 			'fullscreen'  => '',
 			'annotate'    => '',
 			'maxWidth'    => '',
+			'mode'        => '',
+			'cover'       => '',
+			'rtl'         => '',
+			'lightbox'    => '',
 		);
 	}
 
@@ -127,6 +133,14 @@ final class Yape_Renderer {
 		if ( $page > 1 ) {
 			$config['page'] = $page;
 		}
+		if ( self::is_flipbook( $o ) ) {
+			$config['mode']     = 'flipbook';
+			$config['flipbook'] = array(
+				'cover'    => 'hide' !== $o['cover'],
+				'rtl'      => 'show' === $o['rtl'],
+				'lightbox' => 'show' === $o['lightbox'],
+			);
+		}
 
 		/**
 		 * Filters the viewer configuration passed to the browser.
@@ -135,6 +149,32 @@ final class Yape_Renderer {
 		 * @param array $o      Normalised render options.
 		 */
 		return apply_filters( 'yape_viewer_config', $config, $o );
+	}
+
+	/**
+	 * Whether the options ask for a flipbook.
+	 *
+	 * @param array $o Options.
+	 * @return bool
+	 */
+	public static function is_flipbook( array $o ) {
+		return 'flipbook' === $o['mode'];
+	}
+
+	/**
+	 * Preview image of the PDF's first page for a lightbox cover. WordPress makes one at
+	 * upload when the server has Imagick with PDF support; otherwise the browser draws it.
+	 *
+	 * @param array $o Options.
+	 * @return string Image URL or ''.
+	 */
+	public static function cover_image( array $o ) {
+		$id = absint( $o['id'] );
+		if ( ! $id ) {
+			return '';
+		}
+		$src = wp_get_attachment_image_src( $id, 'large' );
+		return $src ? (string) $src[0] : '';
 	}
 
 	/**
@@ -174,6 +214,27 @@ final class Yape_Renderer {
 		}
 
 		$label = '' !== $doc['title'] ? $doc['title'] : __( 'PDF document', 'uaip-yet-another-pdf-editor' );
+
+		if ( ! empty( $config['flipbook']['lightbox'] ) ) {
+			// Only the cover is on the page; it links to the PDF until the script takes over.
+			$wrapper_attributes = preg_replace( '/class="/', 'class="is-lightbox ', $wrapper_attributes, 1 );
+			$max                = Yape_Settings::sanitize_height( $o['maxWidth'] );
+			if ( '' !== $max && false === strpos( $max, 'vh' ) ) {
+				$wrapper_attributes = preg_replace( '/style="/', 'style="--yape-cover-width:' . esc_attr( $max ) . ';', $wrapper_attributes, 1 );
+			}
+			$image = self::cover_image( $o );
+			$art   = '' !== $image
+				? sprintf( '<img src="%s" alt="" loading="lazy" decoding="async">', esc_url( $image ) )
+				: '';
+			return sprintf(
+				'<figure %1$s><div class="yape-pdf__frame yape-pdf__frame--cover" data-yape="%2$s"><a class="yape-pdf__cover" href="%3$s"><span class="yape-pdf__cover-art">%4$s</span><span class="yape-pdf__cover-title">%5$s</span></a></div></figure>',
+				$wrapper_attributes,
+				esc_attr( wp_json_encode( $config ) ),
+				esc_url( $doc['url'] ),
+				$art,
+				esc_html( $label )
+			);
+		}
 
 		return sprintf(
 			'<figure %1$s><div class="yape-pdf__frame" data-yape="%2$s"><a class="yape-pdf__fallback" href="%3$s">%4$s</a></div></figure>',

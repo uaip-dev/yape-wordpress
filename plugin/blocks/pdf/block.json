@@ -6,7 +6,7 @@
   "category": "embed",
   "icon": "pdf",
   "description": "Embed a PDF that visitors can read, search, annotate, fill in and sign.",
-  "keywords": ["pdf", "document", "viewer", "annotate", "sign", "form"],
+  "keywords": ["pdf", "document", "viewer", "annotate", "sign", "form", "flipbook"],
   "textdomain": "uaip-yet-another-pdf-editor",
   "attributes": {
     "id": { "type": "number", "default": 0 },
@@ -24,7 +24,11 @@
     "showDownload": { "type": "string", "default": "" },
     "showPrint": { "type": "string", "default": "" },
     "showFullscreen": { "type": "string", "default": "" },
-    "showAnnotate": { "type": "string", "default": "" }
+    "showAnnotate": { "type": "string", "default": "" },
+    "mode": { "type": "string", "default": "" },
+    "flipCover": { "type": "string", "default": "" },
+    "flipRtl": { "type": "string", "default": "" },
+    "flipLightbox": { "type": "string", "default": "" }
   },
   "supports": {
     "align": ["wide", "full"],

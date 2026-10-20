@@ -346,6 +346,113 @@
   .yape-group { gap: 0; }
 }
 
+/* ---------- flipbook ---------- */
+/* StPageFlip's own rules (it also injects them, but not into the block editor's iframe). */
+.stf__parent { position: relative; display: block; box-sizing: border-box; transform: translateZ(0); touch-action: pan-y; }
+.stf__wrapper { position: relative; width: 100%; box-sizing: border-box; }
+.stf__parent canvas { position: absolute; width: 100%; height: 100%; left: 0; top: 0; }
+.stf__block { position: absolute; width: 100%; height: 100%; box-sizing: border-box; perspective: 2000px; }
+.stf__item { display: none; position: absolute; transform-style: preserve-3d; }
+.stf__outerShadow, .stf__innerShadow, .stf__hardShadow, .stf__hardInnerShadow { position: absolute; left: 0; top: 0; }
+
+.yape-flip__stage {
+  position: absolute;
+  inset: 0;
+  padding: 16px 56px;
+  box-sizing: border-box;
+  background: var(--yape-bg);
+  overflow: hidden;
+}
+.yape-flip__stage:focus-visible { outline: 2px solid var(--yape-accent); outline-offset: -2px; }
+.yape-flip__book.stf__parent { width: 100%; height: 100%; min-width: 0 !important; min-height: 0 !important; }
+.yape-flip__book .stf__wrapper { height: 100%; }
+.yape-flip__page { background: #fff; overflow: hidden; }
+.yape-flip__content { position: absolute; left: 50%; top: 50%; width: 100%; height: 100%; transform: translate(-50%, -50%); }
+.yape-flip__content canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.yape-flip__links { position: absolute; inset: 0; }
+.yape-flip__links a { position: absolute; display: block; }
+.yape-flip__links a:hover, .yape-flip__links a:focus-visible { background: rgb(255 230 0 / 0.25); outline: none; }
+.yape-flip__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 40px;
+  height: 64px;
+  transform: translateY(-50%);
+  background: var(--yape-bar);
+  color: var(--yape-fg);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.18);
+}
+.yape-flip__arrow:disabled { visibility: hidden; }
+.yape-flip__arrow--left { left: 8px; }
+.yape-flip__arrow--right { right: 8px; }
+.yape-flip__thumbs {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 8px;
+  overflow-x: auto;
+  background: var(--yape-bar);
+  border-top: 1px solid var(--yape-border);
+}
+.yape-flip__thumbs[hidden] { display: none; }
+.yape-flip__thumbs .yape-thumb { flex: 0 0 72px; width: 72px; margin: 0; }
+@container (max-width: 560px) {
+  .yape-flip__stage { padding: 8px; }
+  .yape-flip__arrow { display: none; }
+}
+
+/* ---------- lightbox flipbook: a cover that opens the book ---------- */
+.yape-pdf.is-lightbox { width: fit-content; max-width: 100%; }
+.yape-pdf__frame.yape-pdf__frame--cover {
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+  container-type: normal;
+}
+.yape-pdf__cover {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  width: var(--yape-cover-width, 240px);
+  max-width: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+.yape-pdf__cover-art {
+  display: block;
+  min-height: 120px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.yape-pdf__cover-art img, .yape-pdf__cover-art canvas { display: block; width: 100%; height: auto; }
+.yape-pdf__cover:hover .yape-pdf__cover-art, .yape-pdf__cover:focus-visible .yape-pdf__cover-art {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+}
+.yape-pdf__cover-title { font-weight: 600; color: var(--yape-accent); word-break: break-word; }
+.yape-lightbox {
+  width: min(1400px, 96vw);
+  height: 92vh;
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--yape-radius, 6px);
+  background: transparent;
+  overflow: visible;
+}
+.yape-lightbox::backdrop { background: rgb(0 0 0 / 0.7); }
+.yape-lightbox .yape-pdf { width: 100%; height: 100%; margin: 0; }
+.yape-lightbox .yape-pdf__frame { height: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .yape-pdf__cover-art { transition: none; }
+}
+
 /* ---------- print: only our rasterised pages ---------- */
 .yape-print { display: none; }
 @media print {

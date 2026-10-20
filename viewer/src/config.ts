@@ -7,8 +7,20 @@ export type Zoom =
   | "page-actual"
   | `${number}`;
 
+export interface FlipbookConfig {
+  /** Show the first page alone, like a closed book (default true). */
+  cover?: boolean;
+  /** Right-to-left page order (Arabic, Hebrew, Jawi, manga). */
+  rtl?: boolean;
+  /** Show only the cover; the flipbook opens in a lightbox when clicked. */
+  lightbox?: boolean;
+}
+
 export interface ViewerConfig {
   url: string;
+  /** "flipbook" shows pages as a book with page-turn animation. */
+  mode?: "viewer" | "flipbook";
+  flipbook?: FlipbookConfig;
   title?: string;
   /** 1-based page to open at. */
   page?: number;
@@ -97,6 +109,10 @@ export interface Strings {
   color_orange: string;
   color_yellow: string;
   color_pink: string;
+  flipbook: string;
+  pagesOf: string; // "Pages %1$s–%2$s of %3$s"
+  openViewer: string;
+  openFlipbook: string; // "Open flipbook: %s"
 }
 
 const fallback: Strings = {
@@ -168,6 +184,10 @@ const fallback: Strings = {
   color_orange: "Orange",
   color_yellow: "Yellow",
   color_pink: "Pink",
+  flipbook: "Flipbook",
+  pagesOf: "Pages %1$s–%2$s of %3$s",
+  openViewer: "Open in document viewer",
+  openFlipbook: "Open flipbook: %s",
 };
 
 let cached: Strings | null = null;

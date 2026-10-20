@@ -11,6 +11,9 @@ importers:
       esbuild:
         specifier: 0.28.2
         version: 0.28.2
+      page-flip:
+        specifier: 2.0.7
+        version: 2.0.7
       pdfjs-dist:
         specifier: 6.3.289
         version: 6.3.289
@@ -256,6 +259,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  page-flip@2.0.7:
+    resolution: {integrity: sha512-96lQFUUz7r/LZzEUZJ3yBIMEKU9+m8HMFDzTvTdD6P7Ag/wXINjp9n0W7b4wanwnDbQETo4uNUoL3zMqpFxwGA==}
+
   pdfjs-dist@6.3.289:
     resolution: {integrity: sha512-ZHjSVpDa3D6izMq8/04lvkhkATUmL9px6ChPaXc1k6nU2Mrhlg1/7F0bdUqCwUjw3NsPTfPZsMDUU6ZIcRaeQw==}
     engines: {node: '>=22.13.0 || >=24'}
@@ -421,6 +427,8 @@ snapshots:
       '@esbuild/win32-arm64': 0.28.2
       '@esbuild/win32-ia32': 0.28.2
       '@esbuild/win32-x64': 0.28.2
+
+  page-flip@2.0.7: {}
 
   pdfjs-dist@6.3.289:
     optionalDependencies:

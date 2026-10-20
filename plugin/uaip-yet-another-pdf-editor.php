@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       UAIP Yet Another PDF Editor
  * Plugin URI:        https://github.com/uaip-dev/yape-wordpress
- * Description:       PDF viewer and editor for WordPress. Visitors can read, search, highlight, draw, add text, sign and fill in PDFs in the browser, then download their copy. Free, no premium version.
- * Version:           0.1.0
+ * Description:       PDF viewer, flipbook and editor for WordPress. Visitors can read, flip through, search, highlight, draw, add text, sign and fill in PDFs in the browser, then download their copy. Free, no premium version.
+ * Version:           0.2.0
  * Requires at least: 6.5
  * Requires PHP:      7.4
  * Author:            UAIP
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'YAPE_VERSION', '0.1.0' );
+define( 'YAPE_VERSION', '0.2.0' );
 define( 'YAPE_FILE', __FILE__ );
 define( 'YAPE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'YAPE_URL', plugin_dir_url( __FILE__ ) );

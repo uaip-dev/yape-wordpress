@@ -178,6 +178,12 @@ final class Yape_Assets {
 			'color_orange'             => __( 'Orange', 'uaip-yet-another-pdf-editor' ),
 			'color_yellow'             => __( 'Yellow', 'uaip-yet-another-pdf-editor' ),
 			'color_pink'               => __( 'Pink', 'uaip-yet-another-pdf-editor' ),
+			'flipbook'                 => __( 'Flipbook', 'uaip-yet-another-pdf-editor' ),
+			/* translators: 1: first page shown, 2: second page shown, 3: total number of pages. */
+			'pagesOf'                  => __( 'Pages %1$s–%2$s of %3$s', 'uaip-yet-another-pdf-editor' ),
+			'openViewer'               => __( 'Open in document viewer', 'uaip-yet-another-pdf-editor' ),
+			/* translators: %s: document title. */
+			'openFlipbook'             => __( 'Open flipbook: %s', 'uaip-yet-another-pdf-editor' ),
 		);
 	}
 }

@@ -1,18 +1,30 @@
 === UAIP Yet Another PDF Editor ===
 Contributors: uaip
-Tags: pdf, pdf viewer, pdf annotation, sign pdf, pdf form
+Tags: pdf, pdf viewer, flipbook, pdf annotation, sign pdf
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-PDF viewer and editor: visitors can read, search, annotate, sign and fill in PDFs right in the browser. Free, no premium version.
+PDF viewer, flipbook and editor: read, search, annotate, sign and fill in PDFs right in the browser. Free, no premium version.
 
 == Description ==
 
 UAIP Yet Another PDF Editor puts a PDF viewer and editor on your pages. Visitors can read a PDF, mark it up, sign it or fill it in, and download their own copy, all in the browser. Every feature is free: there is no premium version, no locked settings and no upgrade notices.
+
+= Flipbook =
+
+* Show any PDF from your Media Library as a book with turning pages: magazines, brochures, catalogues, menus, yearbooks. No account and no conversion service: the pages are drawn in the visitor's browser from your own PDF.
+* Turn pages by clicking, dragging a corner, swiping, or with the keyboard.
+* Two-page spreads on wide screens, one page on phones.
+* The first page as a cover, or pages paired from the start.
+* Right-to-left books for Arabic, Hebrew, Jawi or manga.
+* Show only the cover on the page; the flipbook opens in a lightbox when it is clicked.
+* Thumbnail strip, page number box, download, print and full screen. Links in the PDF stay clickable.
+* One click switches to the document viewer for search, zoom, annotating and signing.
+* Follows the visitor's "reduce motion" setting, and screen readers can read the page text.
 
 = Annotate and sign =
 
@@ -48,7 +60,8 @@ UAIP Yet Another PDF Editor puts a PDF viewer and editor on your pages. Visitors
 = Easy to use =
 
 * **PDF Viewer block**: upload or pick a PDF, then set the height, start page, zoom and toolbar buttons per block. The editor shows a live preview.
-* **Shortcode**: `[yape_pdf id="123"]` for classic content, widgets and page builders.
+* **PDF Flipbook block**: the same block, shown as a book. Switch any PDF Viewer block between the two in its settings.
+* **Shortcode**: `[yape_pdf id="123"]` or `[yape_flipbook id="123"]` for classic content, widgets and page builders.
 * Turn a File block that links to a PDF into a PDF Viewer block in one click.
 
 = Coming next =
@@ -73,6 +86,16 @@ No. Everything is free.
 `[yape_pdf id="123" height="80vh" page="2" zoom="page-width" download="no" print="no" search="yes" sidebar="yes" fullscreen="yes" annotate="no" thumbnails="open" load="click" toolbar="none" title="Annual report"]`
 
 Use `id` for a PDF from the Media Library, or `url` for a PDF at another address. `width` limits the viewer's maximum width.
+
+= Which flipbook options are there? =
+
+`[yape_flipbook id="123" height="80vh" page="1" cover="no" rtl="yes" lightbox="yes" width="300px" thumbnails="open" download="no" print="no" fullscreen="yes"]`
+
+`[yape_flipbook]` is the same as `[yape_pdf mode="flipbook"]`. `cover="no"` pairs pages from the first page instead of showing it alone. `rtl="yes"` turns pages from right to left. `lightbox="yes"` shows only the cover (at most `width` wide, 240px by default), and the flipbook opens over the page when it is clicked. `sidebar` controls the thumbnail strip, and `search`, `zoombar` or `annotate` add a button that opens the document viewer.
+
+= Where does the lightbox cover image come from? =
+
+When WordPress can make a preview image of the PDF at upload (your host needs Imagick with PDF support), that image is used. Otherwise the visitor's browser draws the first page.
 
 = Can I show a PDF from another website? =
 
@@ -109,10 +132,16 @@ Yes. The viewer loads PDFs and its own files directly from your site and does no
 
 == Changelog ==
 
+= 0.2.0 =
+* New: flipbook. Show a PDF as a book with turning pages, from the PDF Flipbook block, the block's "Show as" setting or the [yape_flipbook] shortcode. Cover page, right-to-left books, lightbox from a cover image, thumbnail strip, download, print, full screen and clickable links.
+
 = 0.1.0 =
 * First release: PDF Viewer block, [yape_pdf] shortcode, search, thumbnails, outline, links, zoom, download, print, full screen, form filling, annotate (highlight, draw, text, images) and sign, password-protected PDFs, lazy loading.
 
 == Upgrade Notice ==
+
+= 0.2.0 =
+Adds the flipbook: show any PDF as a book with turning pages.
 
 = 0.1.0 =
 First release.
@@ -121,6 +150,7 @@ First release.
 
 * pdf.js, Copyright Mozilla Foundation, Apache License 2.0 (build/pdfjs/LICENSE).
 * Standard fonts bundled with pdf.js: Foxit fonts (BSD-style, build/pdfjs/standard_fonts/LICENSE_FOXIT) and Liberation fonts (SIL Open Font License 1.1, build/pdfjs/standard_fonts/LICENSE_LIBERATION).
+* StPageFlip (page-flip 2.0.7), Copyright Nodlik, MIT License (build/viewer/page-flip-LICENSE.txt). Page-turn animation of the flipbook.
 * Image decoders bundled with pdf.js: OpenJPEG (BSD 2-Clause), QCMS (MIT) and the PDFium JBIG2 decoder (BSD 3-Clause). Licenses are in build/pdfjs/wasm/.
 
 Source code, including the unminified viewer and build scripts: https://github.com/uaip-dev/yape-wordpress

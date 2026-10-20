@@ -14,40 +14,12 @@ import { format, strings, type ViewerConfig } from "./config";
 import { icons } from "./icons";
 import { printDocument } from "./print";
 import { createAnnotator, HIGHLIGHT_COLORS, type Annotator } from "./annotate";
-
-const assetBase = new URL("../pdfjs/", import.meta.url);
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("pdf.worker.min.js", assetBase).href;
+import { bindFullscreen, download, fileName, h, openDocument } from "./common";
 
 const PRESETS = ["auto", "page-fit", "page-width", "page-actual"] as const;
 const PERCENTS = [50, 75, 100, 125, 150, 200, 300, 400];
 
 type Toolbar = Exclude<ViewerConfig["toolbar"], false | undefined>;
-
-function h<K extends keyof HTMLElementTagNameMap>(
-  doc: Document,
-  tag: K,
-  attrs: Record<string, string | boolean> = {},
-  ...children: (Node | string)[]
-): HTMLElementTagNameMap[K] {
-  const el = doc.createElement(tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v === false) continue;
-    if (k === "html") el.innerHTML = String(v);
-    else el.setAttribute(k, v === true ? "" : v);
-  }
-  el.append(...children);
-  return el;
-}
-
-function fileName(config: ViewerConfig): string {
-  try {
-    const last = new URL(config.url, location.href).pathname.split("/").pop();
-    if (last) return decodeURIComponent(last);
-  } catch {
-    // Fall through.
-  }
-  return (config.title || "document").replace(/[\\/:*?"<>|]+/g, "-") + ".pdf";
-}
 
 export async function createViewer(frame: HTMLElement, config: ViewerConfig): Promise<() => void> {
   const doc = frame.ownerDocument;
@@ -169,57 +141,15 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
   });
   linkService.setViewer(viewer);
 
-  const loadingTask = pdfjsLib.getDocument({
-    url: config.url,
-    cMapUrl: new URL("cmaps/", assetBase).href,
-    cMapPacked: true,
-    standardFontDataUrl: new URL("standard_fonts/", assetBase).href,
-    wasmUrl: new URL("wasm/", assetBase).href,
-    iccUrl: new URL("iccs/", assetBase).href,
-    enableXfa: false,
-  });
-  loadingTask.onProgress = ({ loaded, total }: { loaded: number; total: number }) => {
-    if (total > 0) message.textContent = `${t.loading} ${Math.min(100, Math.round((loaded / total) * 100))}%`;
-  };
-  loadingTask.onPassword = (update: (pw: string) => void, reason: number) => {
-    askPassword(reason === pdfjsLib.PasswordResponses.INCORRECT_PASSWORD).then(update);
-  };
-
-  function askPassword(wrong: boolean): Promise<string> {
-    return new Promise((resolve) => {
-      const input = h(doc, "input", { type: "password", "aria-label": t.password, autocomplete: "off" });
-      const form = h(doc, "form", { class: "yape-password" },
-        h(doc, "p", {}, wrong ? t.passwordWrong : t.passwordPrompt),
-        input,
-        h(doc, "button", { type: "submit", class: "yape-btn yape-btn--text" }, t.open));
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        message.replaceChildren(t.loading);
-        resolve(input.value);
-      });
-      message.hidden = false;
-      message.replaceChildren(form);
-      input.focus();
-    });
-  }
-
-  let pdf: PDFDocumentProxy;
-  try {
-    pdf = await loadingTask.promise;
-  } catch (err) {
-    if ((err as Error)?.name === "AbortException") return () => {};
-    message.replaceChildren(
-      h(doc, "p", {}, t.error),
-      h(doc, "a", { href: config.url, target: "_blank", rel: "noopener" }, t.openDirectly),
-    );
-    message.classList.add("is-error");
-    console.error("[yape] PDF load failed", err);
+  const { task: loadingTask, pdf: loaded } = await openDocument(doc, config, message, t);
+  if (!loaded) {
     return () => {
       void loadingTask.destroy();
       frame.replaceChildren(...original);
       frame.classList.remove("is-mounted");
     };
   }
+  const pdf: PDFDocumentProxy = loaded;
 
   message.hidden = true;
   viewer.setDocument(pdf);
@@ -471,10 +401,7 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
       href = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
       revoke = true;
     }
-    const a = h(doc, "a", { href, download: name, rel: "noopener" });
-    doc.body.append(a);
-    a.click();
-    a.remove();
+    download(doc, href, name);
     annotator?.markSaved();
     if (revoke) win.setTimeout(() => URL.revokeObjectURL(href), 30_000);
   });
@@ -490,28 +417,7 @@ export async function createViewer(frame: HTMLElement, config: ViewerConfig): Pr
     }
   });
 
-  const isFullscreen = () => doc.fullscreenElement === figure || figure.classList.contains("yape-pdf--fs");
-  const syncFs = () => {
-    const fs = isFullscreen();
-    fsBtn.innerHTML = fs ? icons.exitFullscreen : icons.fullscreen;
-    fsBtn.setAttribute("aria-label", fs ? t.exitFullscreen : t.fullscreen);
-    fsBtn.title = fs ? t.exitFullscreen : t.fullscreen;
-  };
-  on(fsBtn, "click", async () => {
-    if (doc.fullscreenElement === figure) await doc.exitFullscreen();
-    else if (figure.classList.contains("yape-pdf--fs")) figure.classList.remove("yape-pdf--fs");
-    else if (figure.requestFullscreen && doc.fullscreenEnabled) await figure.requestFullscreen().catch(() => figure.classList.add("yape-pdf--fs"));
-    else figure.classList.add("yape-pdf--fs"); // iPhone Safari: no element full screen.
-    syncFs();
-    container.focus();
-  });
-  on(doc, "fullscreenchange", syncFs);
-  on(doc, "keydown", (e: KeyboardEvent) => {
-    if (e.key === "Escape" && figure.classList.contains("yape-pdf--fs")) {
-      figure.classList.remove("yape-pdf--fs");
-      syncFs();
-    }
-  });
+  bindFullscreen(doc, figure, fsBtn, t, on, () => container.focus());
 
   return () => {
     cleanups.forEach((fn) => fn());
