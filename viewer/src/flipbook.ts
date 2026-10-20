@@ -475,7 +475,7 @@ export async function createFlipbook(
 export async function renderCover(target: HTMLElement, config: ViewerConfig, cssWidth: number): Promise<void> {
   const doc = target.ownerDocument;
   const win = doc.defaultView ?? window;
-  const task = pdfjsLib.getDocument({ ...documentParams(config.url), disableAutoFetch: true });
+  const task = pdfjsLib.getDocument({ ...documentParams(config.url, doc), disableAutoFetch: true });
   try {
     const pdf = await task.promise;
     const page = await pdf.getPage(1);

@@ -4,7 +4,7 @@ Tags: pdf, pdf viewer, flipbook, pdf annotation, sign pdf
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,8 +129,14 @@ Yes. The viewer loads PDFs and its own files directly from your site and does no
 4. Searching inside a document.
 5. Block settings in the editor.
 6. Settings > PDF Viewer.
+7. A brochure as a flipbook, with a page being turned.
+8. A flipbook opened in a lightbox from its cover, with the thumbnail strip.
+9. Flipbook settings in the block editor: cover page, right-to-left pages and lightbox.
 
 == Changelog ==
+
+= 0.2.1 =
+* Fix: in the block editor preview, text of PDFs with embedded fonts showed as empty boxes.
 
 = 0.2.0 =
 * New: flipbook. Show a PDF as a book with turning pages, from the PDF Flipbook block, the block's "Show as" setting or the [yape_flipbook] shortcode. Cover page, right-to-left books, lightbox from a cover image, thumbnail strip, download, print, full screen and clickable links.
@@ -139,6 +145,9 @@ Yes. The viewer loads PDFs and its own files directly from your site and does no
 * First release: PDF Viewer block, [yape_pdf] shortcode, search, thumbnails, outline, links, zoom, download, print, full screen, form filling, annotate (highlight, draw, text, images) and sign, password-protected PDFs, lazy loading.
 
 == Upgrade Notice ==
+
+= 0.2.1 =
+Fixes text in the block editor preview.
 
 = 0.2.0 =
 Adds the flipbook: show any PDF as a book with turning pages.

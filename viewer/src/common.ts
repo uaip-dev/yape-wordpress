@@ -42,10 +42,14 @@ export function download(doc: Document, href: string, name: string): void {
   a.remove();
 }
 
-/** pdf.js getDocument() parameters, with runtime data served from the plugin. */
-export function documentParams(url: string) {
+/**
+ * pdf.js getDocument() parameters, with runtime data served from the plugin. Fonts load
+ * into `doc`, which matters in the block editor: its canvas lives in an iframe.
+ */
+export function documentParams(url: string, doc: Document) {
   return {
     url,
+    ownerDocument: doc,
     cMapUrl: new URL("cmaps/", assetBase).href,
     cMapPacked: true,
     standardFontDataUrl: new URL("standard_fonts/", assetBase).href,
@@ -65,7 +69,7 @@ export async function openDocument(
   message: HTMLElement,
   t: Strings,
 ): Promise<{ task: PDFDocumentLoadingTask; pdf: PDFDocumentProxy | null }> {
-  const task = pdfjsLib.getDocument(documentParams(config.url));
+  const task = pdfjsLib.getDocument(documentParams(config.url, doc));
   task.onProgress = ({ loaded, total }: { loaded: number; total: number }) => {
     if (total > 0) message.textContent = `${t.loading} ${Math.min(100, Math.round((loaded / total) * 100))}%`;
   };
